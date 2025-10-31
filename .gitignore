@@ -1,0 +1,8 @@
+# Ignora la carpeta de dependencias
+/node_modules
+
+# Ignora el archivo de variables de entorno (contraseñas)
+.env
+
+# Ignora la carpeta de configuración (donde guardaste la clave de Cloudinary)
+/config
