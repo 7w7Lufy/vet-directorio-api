@@ -51,7 +51,10 @@ const db = mysql.createPool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    port: process.env.DB_PORT
+    port: process.env.DB_PORT || 3306,
+    ssl: {
+        "rejectUnauthorized": true // <-- ESTA ES LA LÍNEA CRUCIAL
+    }
 }).promise(); // Usamos .promise() para poder usar async/await, que es más moderno
 
 // --- AÑADE ESTE MIDDLEWARE DE AUTORIZACIÓN ---
