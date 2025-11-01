@@ -857,15 +857,20 @@ app.delete('/api/veterinarios/:vetId/especialidades/:especialidadId',checkAdminR
 // server.js
 
 // POST: Registrar un nuevo usuario (con encriptación)
+// POST: Registrar un nuevo usuario (CORREGIDO Y SEGURO)
 app.post('/api/register', async (req, res) => {
     try {
-        const { email, password, rol = 'veterinario' } = req.body; // rol por defecto
+        // 1. SOLO extraemos email y password. Ignoramos 'rol' del body.
+        const { email, password } = req.body; 
         if (!email || !password) {
             return res.status(400).json({ message: 'Email y contraseña son obligatorios.' });
         }
-        // Encripta la contraseña
+        // 2. Definimos el rol manualmente. Todos los registros nuevos son 'veterinario'.
+        const rol = 'veterinario'; 
+        // 3. Encriptar la contraseña
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
+        // 4. Guardar el nuevo usuario con el rol 'veterinario'
         const sql = "INSERT INTO Usuarios (email, password, rol) VALUES (?, ?, ?)";
         const [result] = await db.query(sql, [email, hashedPassword, rol]);
         res.status(201).json({ message: 'Usuario registrado con éxito.', userId: result.insertId });
