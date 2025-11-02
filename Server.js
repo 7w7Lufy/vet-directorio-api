@@ -223,7 +223,7 @@ app.get('/api/veterinarios', async (req, res) => {
              baseSql += ` AND v.acepta_urgencias = 0`; // 0 es FALSE en MySQL
         }
         // --- FIN BLOQUE URGENCIAS ---
-        baseSql += ` ORDER BY v.nombre_completo ASC;`;
+        baseSql += ` ORDER BY RAND();`;
         // Ejecuta la consulta para obtener IDs
         const [vetIdsResult] = await db.query(baseSql, params);
         const vetIds = vetIdsResult.map(row => row.id);
