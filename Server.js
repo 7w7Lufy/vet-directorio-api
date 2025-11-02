@@ -223,10 +223,19 @@ app.get('/api/veterinarios', async (req, res) => {
              baseSql += ` AND v.acepta_urgencias = 0`; // 0 es FALSE en MySQL
         }
         // --- FIN BLOQUE URGENCIAS ---
-        baseSql += ` ORDER BY RAND();`;
         // Ejecuta la consulta para obtener IDs
         const [vetIdsResult] = await db.query(baseSql, params);
         const vetIds = vetIdsResult.map(row => row.id);
+
+
+        //--- ¡AÑADE ESTO PARA BARAJAR EL ARRAY DE IDs! ---
+        // Algoritmo Fisher-Yates (eficiente para barajar)
+        for (let i = vetIds.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [vetIds[i], vetIds[j]] = [vetIds[j], vetIds[i]];
+        }
+
+
         if (vetIds.length === 0) {
             return res.status(200).json([]);
         }
