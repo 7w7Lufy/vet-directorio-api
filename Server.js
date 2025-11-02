@@ -719,9 +719,9 @@ app.get('/api/veterinarios/:id', async (req, res) => {
         const ubicacionesSql = `
             SELECT 
                 u.id, u.nombre_clinica, u.calle_numero, u.colonia, 
-                u.codigo_postal, u.ciudad, u.estado, u.telefono_contacto,
+                u.codigo_postal, u.ciudad, u.estado, u.telefono_contacto, 
                 u.latitud, u.longitud, 
-                u.servicios_texto, u.capacidades_texto, u.horarios_texto, u.map_url,
+                u.servicios_texto, u.capacidades_texto, u.horarios_texto, u.map_url
             FROM Ubicaciones u 
             JOIN Veterinario_Ubicaciones vu ON u.id = vu.ubicacion_id 
             WHERE vu.veterinario_id = ?`;
