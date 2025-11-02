@@ -436,7 +436,8 @@ app.post('/api/ubicaciones', checkAdminRole, async (req, res) => {
     try {
         const { nombre_clinica, calle_numero, colonia, codigo_postal, ciudad, estado, 
             telefono_contacto, latitud, longitud, 
-            servicios_texto, capacidades_texto, horarios_texto
+            servicios_texto, capacidades_texto, horarios_texto, 
+            map_url
             } = req.body;
         if (!nombre_clinica || !calle_numero || !ciudad || !estado) {
             return res.status(400).json({ message: 'Los campos obligatorios son: nombre_clinica, calle_numero, ciudad, estado.' });
@@ -444,8 +445,9 @@ app.post('/api/ubicaciones', checkAdminRole, async (req, res) => {
         const sql = `INSERT INTO Ubicaciones (
                 nombre_clinica, calle_numero, colonia, codigo_postal, ciudad, estado, 
                 telefono_contacto, latitud, longitud, 
-                servicios_texto, capacidades_texto, horarios_texto
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                servicios_texto, capacidades_texto, horarios_texto,
+                map_url
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         
             const values = [
             nombre_clinica, calle_numero, colonia, codigo_postal, ciudad, estado, 
@@ -454,7 +456,8 @@ app.post('/api/ubicaciones', checkAdminRole, async (req, res) => {
             longitud || null, 
             servicios_texto || null, 
             capacidades_texto || null, 
-            horarios_texto || null
+            horarios_texto || null,
+            map_url || null
         ];
         const [result] = await db.query(sql, values);
         res.status(201).json({ message: 'Ubicación creada con éxito.', nuevoId: result.insertId });
@@ -472,7 +475,8 @@ app.put('/api/ubicaciones/:id',checkAdminRole, async (req, res) => {
         const { 
             nombre_clinica, calle_numero, colonia, codigo_postal, ciudad, estado, 
             telefono_contacto, latitud, longitud, 
-            servicios_texto, capacidades_texto, horarios_texto
+            servicios_texto, capacidades_texto, horarios_texto,
+            map_url
         } = req.body;
         // Validación básica (puedes hacerla más robusta)
         if (!nombre_clinica || !calle_numero || !ciudad || !estado) {
@@ -483,7 +487,8 @@ app.put('/api/ubicaciones/:id',checkAdminRole, async (req, res) => {
             UPDATE Ubicaciones SET 
                 nombre_clinica = ?, calle_numero = ?, colonia = ?, codigo_postal = ?, 
                 ciudad = ?, estado = ?, telefono_contacto = ?, latitud = ?, longitud = ?, 
-                servicios_texto = ?, capacidades_texto = ?, horarios_texto = ? 
+                servicios_texto = ?, capacidades_texto = ?, horarios_texto = ?,
+                map_url = ?
             WHERE id = ?`;
         // Asegúrate de que el array de valores tenga el MISMO ORDEN y NÚMERO de elementos que los '?'
         const values = [
@@ -494,6 +499,7 @@ app.put('/api/ubicaciones/:id',checkAdminRole, async (req, res) => {
             servicios_texto || null, 
             capacidades_texto || null, 
             horarios_texto || null,
+            map_url || null,
             id // El ID va al final para el WHERE
         ];
         const [result] = await db.query(sql, values);
